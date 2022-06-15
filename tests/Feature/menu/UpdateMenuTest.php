@@ -1,18 +1,17 @@
 <?php
 
-namespace Database\Seeders;
+namespace Tests\Feature\menu;
 
-use App\Models\Article;
 use App\Models\Category;
 use App\Models\Menu;
-use Illuminate\Database\Seeder;
+use Tests\TestCase;
 
-class DatabaseSeeder extends Seeder
+class UpdateMenuTest extends TestCase
 {
     /**
      * @return void
      */
-    public function run()
+    public function testMenuUpdateSuccessful()
     {
         $newsCategory = Category::query()->create([
             'type' => Category::CATEGORY_TYPES['MULTI'],
@@ -38,24 +37,22 @@ class DatabaseSeeder extends Seeder
             'category_id' => $aboutUsCategory->id,
             'title' => 'About us',
         ]);
-        $newsMenu = Menu::query()->create([
-            'category_id' => $newsCategory->id,
-            'title' => 'News',
-        ]);
-        $contactsMenu = Menu::query()->create([
-            'category_id' => $contactsCategory->id,
-            'title' => 'Contacts',
-        ]);
-        Category::factory()->count(10)->create();
-        Article::factory()->create([
+        Menu::factory()->count(10)->create([
             'category_id' => $aboutUsCategory->id,
-            'author' => Article::ARTICLE_AUTHOR['ADMIN'],
         ]);
-        Article::factory()->create([
+        $newData = [
             'category_id' => $contactsCategory->id,
-            'author' => Article::ARTICLE_AUTHOR['ADMIN'],
-        ]);
-        Article::factory()->count(10)->create(['category_id' => $newsCategory->id]);
-        Article::factory()->count(10)->create(['category_id' => $firstSubCategory->id]);
+            'title' => 'New contacts',
+        ];
+        $id = Menu::query()
+            ->where('id', '!=', null)
+            ->where('title', '!=', 'About us')
+            ->first();
+        $this->patchJson('/api/menu/' . $id->id, $newData)
+            ->assertExactJson(['data' => [
+                'id' => $id->id,
+                'category_id' => $contactsCategory->id,
+                'title' => 'New contacts',
+            ]]);
     }
 }
