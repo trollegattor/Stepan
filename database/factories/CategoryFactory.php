@@ -20,12 +20,10 @@ class CategoryFactory extends Factory
      */
     public function definition(): array
     {
-        $type = ['single', 'multiple'];
-
         return [
             'name' => $this->faker->name(),
-            'type' => 'multiple',
-            'parent_id'=>Category::query()->where('name','News')->value('id'),
+            'type' => 'single',
+            'parent_id' => null,
         ];
     }
 }

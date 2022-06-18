@@ -6,11 +6,12 @@ use App\Models\Category;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
+use voku\helper\ASCII;
 
 class CategoryService
 {
-
     /**
      * @return Collection
      */
@@ -20,46 +21,47 @@ class CategoryService
     }
 
     /**
-     * @param $data
-     * @return Builder|Model
+     * @param array $data
+     * @return Category
      */
-    public function create($data): Model|Builder
+    public function create(array $data): Category
     {
-        return Category::query()->create($data);
+        /** @var Category $category */
+        $category = Category::query()->create($data);
+
+        return $category;
     }
 
     /**
      * @param $id
      * @param $data
-     * @return Builder|Builder[]|Collection|Model|null
+     * @return int
      */
-    public function update($id, $data): Model|Collection|Builder|array|null
+    public function update(int $id, array $data): int
     {
-        $model = Category::query()->findOrFail($id);
-        $model->update($data);
+        return Category::query()->where('id', $id)->update($data);
+    }
+
+    /**
+     * @param int $id
+     * @return Category
+     */
+    public function show(int $id): Category
+    {
+        /** @var Category $model */
+        $model=Category::query()->find($id);
 
         return $model;
     }
 
     /**
      * @param int $id
-     * @return Builder|Builder[]|Collection|Model|null
-     */
-    public function show(int $id): Model|Collection|Builder|array|null
-    {
-        return Category::query()->findOrFail($id);
-    }
-
-    /**
-     * @param int $id
-     * @return bool|null
+     * @return bool
      * @throws Throwable
      */
-    public function destroy(int $id): ?bool
+    public function destroy(int $id): bool
     {
-        $model = Category::query()->findOrFail($id);
-
-        return $model->deleteOrFail();
+        return Category::query()->where('id', $id)->delete();
     }
 
 }

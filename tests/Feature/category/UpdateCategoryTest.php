@@ -23,8 +23,8 @@ class UpdateCategoryTest extends TestCase
      */
     public function testCategoryUpdateSuccessful()
     {
-        Category::query()->create($this->data);
-        Category::factory()->count(10)->create();
+        $category = Category::query()->create($this->data);
+        Category::factory()->count(10)->create(['parent_id' => $category->id]);
         $parentId = Category::query()
             ->where('name', '=', 'News')
             ->first();

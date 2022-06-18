@@ -3,18 +3,21 @@
 namespace Tests\Feature\category;
 
 use App\Models\Category;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class DestroyCategoryTest extends TestCase
 {
+    use RefreshDatabase, WithFaker;
+
     public array $data = [
         'type' => Category::CATEGORY_TYPES['MULTI'],
         'name' => 'News',
         'parent_id' => Category::PARENT_ID['NULL'],
         ];
-    use RefreshDatabase, WithFaker;
 
     /**
      * @return void
@@ -34,16 +37,9 @@ class DestroyCategoryTest extends TestCase
      */
     public function testCategoryDestroyFailed()
     {
-        Category::query()->create($this->data);
-        Category::factory()->count(10)->create();
-        $count=Category::query();
-        for($i=1; $count!==null; $i++)
-        {
-            $count=Category::query()->where('id','=',$i)->first();
-            $id=$i;
-        }
-        $this->deleteJson('/api/category/' . $id)
-            ->assertNotFound();
+        $category = Category::query()->latest('id')->first()->id ?? 1;
+        $response = $this->deleteJson('/api/category/' . $category + 1);
+        $this->assertEquals('false', $response->getContent());
     }
 
 }

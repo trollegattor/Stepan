@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Services\CategoryService\CategoryService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Throwable;
 
@@ -27,6 +28,7 @@ class CategoryController extends Controller
     /**
      * @param StoreCategoryRequest $request
      * @param CategoryService $categoryService
+     *
      * @return CategoryResource
      */
     public function store(StoreCategoryRequest $request, CategoryService $categoryService): CategoryResource
@@ -75,14 +77,15 @@ class CategoryController extends Controller
         return new CategoryResource($updateCategory);
     }
 
+
     /**
      * @param int $id
      * @param CategoryService $categoryService
-     * @return bool|null
+     * @return JsonResponse
      * @throws Throwable
      */
-    public function destroy(int $id, CategoryService $categoryService): ?bool
+    public function destroy(int $id, CategoryService $categoryService)
     {
-        return $categoryService->destroy($id);
+        return new JsonResponse($categoryService->destroy($id));
     }
 }
