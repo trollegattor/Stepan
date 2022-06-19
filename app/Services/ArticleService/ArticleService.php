@@ -22,45 +22,46 @@ class ArticleService
 
     /**
      * @param $data
-     * @return Builder|Model
+     * @return Article
      */
-    public function create($data): Model|Builder
+    public function create(array $data): Article
     {
-        return Article::query()->create($data);
+        /** @var Article $article */
+        $article=Article::query()->create($data);
+
+        return $article;
     }
 
     /**
      * @param $id
      * @param $data
-     * @return Builder|Builder[]|Collection|Model|null
+     * @return int
      */
-    public function update($id, $data): Model|Collection|Builder|array|null
+    public function update(int $id, array $data): int
     {
-        $model = Article::query()->findOrFail($id);
-        $model->update($data);
-
-        return $model;
+        return Article::query()->find('id',$id)->update($data);
     }
 
     /**
      * @param int $id
-     * @return Builder|Builder[]|Collection|Model|null
+     * @return Article
      */
-    public function show(int $id): Model|Collection|Builder|array|null
+    public function show(int $id): Article
     {
-        return Article::query()->findOrFail($id);
+        /** @var Article $article */
+        $article=Article::query()->findOrFail($id);
+
+        return $article;
     }
 
     /**
      * @param int $id
-     * @return bool|null
+     * @return bool
      * @throws Throwable
      */
-    public function destroy(int $id): ?bool
+    public function destroy(int $id): bool
     {
-        $model = Article::query()->findOrFail($id);
-
-        return $model->deleteOrFail();
+        return Article::query()->find('id',$id)->find($id);
     }
 
 }

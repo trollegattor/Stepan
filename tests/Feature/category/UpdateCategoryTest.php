@@ -3,18 +3,18 @@
 namespace Tests\Feature\category;
 
 use App\Models\Category;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class UpdateCategoryTest extends TestCase
 {
+    use DatabaseMigrations, WithFaker;
     public array $data = [
         'type' => Category::CATEGORY_TYPES['MULTI'],
         'name' => 'News',
         'parent_id' => Category::PARENT_ID['NULL'],
     ];
-    use RefreshDatabase, WithFaker;
 
     /**
      * A basic feature test example.

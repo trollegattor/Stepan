@@ -3,19 +3,18 @@
 namespace Tests\Feature\category;
 
 use App\Models\Category;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class ShowCategoryTest extends TestCase
 {
+    use DatabaseMigrations, WithFaker;
     public array $data=[
         'type' => Category::CATEGORY_TYPES['MULTI'],
         'name' => 'News',
         'parent_id'=>Category::PARENT_ID['NULL'],
-
         ];
-    use RefreshDatabase, WithFaker;
 
     /**
      * A basic feature test example.
@@ -35,17 +34,19 @@ class ShowCategoryTest extends TestCase
      * @return void
      *
      */
-    public function testCategoryFailedShowGet()
+    public function testCategoryShowSuccessfulValid()
     {
-        Category::query()->create($this->data);
-        Category::factory()->count(10)->create();
-        $count=Category::query();
-        for($i=1; $count!==null; $i++)
-        {
-            $count=Category::query()->where('id','=',$i)->first();
-            $id=$i;
-        }
-        $response = $this->getJson('/api/category/'.$id);
-        $response->assertNotFound();
+        $category=Category::query()->create($this->data);
+        $this->getJson('/api/category/'.$category->id)
+             ->assertJsonMissingValidationErrors(['id']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testCategoryShowFailedValid()
+    {
+        $this->getJson('/api/category/15686454544')
+            ->assertJsonValidationErrors(['id']);
     }
 }

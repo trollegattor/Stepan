@@ -72,10 +72,10 @@ class MenuController extends Controller
     /**
      * @param int $id
      * @param MenuService $menuService
-     * @return bool|null
+     * @return bool
      * @throws Throwable
      */
-    public function destroy(int $id, MenuService $menuService): ?bool
+    public function destroy(int $id, MenuService $menuService): bool
     {
         return $menuService->destroy($id);
     }

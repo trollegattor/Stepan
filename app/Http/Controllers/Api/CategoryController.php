@@ -2,12 +2,18 @@
 
 namespace App\Http\Controllers\Api;
 
+
+use App\Http\Requests\UpdateCategoryRequest;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ShowCategoryRequest;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Resources\CategoryResource;
+use App\Models\Category;
 use App\Services\CategoryService\CategoryService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Validator;
 use Throwable;
 
 class CategoryController extends Controller
@@ -44,29 +50,29 @@ class CategoryController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param int $id
+     * @param ShowCategoryRequest $request
      * @param CategoryService $categoryService
      * @return CategoryResource
      */
-    public function show(int $id, CategoryService $categoryService): CategoryResource
+    public function show(ShowCategoryRequest $request, CategoryService $categoryService): CategoryResource
     {
+        $id=$request->route('category');
         $model = $categoryService->show($id);
 
         return new CategoryResource($model);
+
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param StoreCategoryRequest $request
-     * @param int $id
+     * @param UpdateCategoryRequest $request
      * @param CategoryService $categoryService
      * @return CategoryResource
      */
-    public function update(StoreCategoryRequest $request, int $id, CategoryService $categoryService): CategoryResource
+    public function update(UpdateCategoryRequest $request, CategoryService $categoryService): CategoryResource
     {
+        $id=$request->route('category');
         $data = [
             'name' => $request->input('name'),
             'type' => $request->input('type'),
@@ -76,7 +82,6 @@ class CategoryController extends Controller
 
         return new CategoryResource($updateCategory);
     }
-
 
     /**
      * @param int $id

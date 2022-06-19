@@ -21,45 +21,46 @@ class MenuService
 
     /**
      * @param $data
-     * @return Builder|Model
+     * @return Menu
      */
-    public function create($data): Model|Builder
+    public function create(array $data): Menu
     {
-        return Menu::query()->create($data);
-    }
+        /** @var Menu $menu */
+        $menu=Menu::query()->create($data);
 
-    /**
-     * @param $id
-     * @param $data
-     * @return Builder|Builder[]|Collection|Model|null
-     */
-    public function update($id, $data): Model|Collection|Builder|array|null
-    {
-        $model = Menu::query()->findOrFail($id);
-        $model->update($data);
-
-        return $model;
+        return $menu;
     }
 
     /**
      * @param int $id
-     * @return Builder|Builder[]|Collection|Model|null
+     * @param array $data
+     * @return int
      */
-    public function show(int $id): Model|Collection|Builder|array|null
+    public function update(int $id,array $data): int
     {
-        return Menu::query()->findOrFail($id);
+        return Menu::query()->find('id',$id)->update($data);
     }
 
     /**
      * @param int $id
-     * @return bool|null
+     * @return Menu
+     */
+    public function show(int $id): Menu
+    {
+        /** @var Menu $menu */
+        $menu=Menu::query()->findOrFail($id);
+
+        return $menu;
+    }
+
+    /**
+     * @param int $id
+     * @return bool
      * @throws Throwable
      */
-    public function destroy(int $id): ?bool
+    public function destroy(int $id): bool
     {
-        $model = Menu::query()->findOrFail($id);
-
-        return $model->deleteOrFail();
+        return Menu::query()->find('id',$id)->find($id);
     }
 
 }

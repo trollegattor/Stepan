@@ -88,7 +88,7 @@ class ArticleController extends Controller
      * @return bool
      * @throws Throwable
      */
-    public function destroy(int $id, ArticleService $articleService): ?bool
+    public function destroy(int $id, ArticleService $articleService): bool
     {
         return $articleService->destroy($id);
     }
