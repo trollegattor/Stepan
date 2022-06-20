@@ -63,13 +63,7 @@ class CategoryController extends Controller
 
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param UpdateCategoryRequest $request
-     * @param CategoryService $categoryService
-     * @return CategoryResource
-     */
+   
     public function update(UpdateCategoryRequest $request, CategoryService $categoryService): CategoryResource
     {
         $id=$request->route('category');
