@@ -33,13 +33,16 @@ class ArticleService
     }
 
     /**
-     * @param $id
-     * @param $data
-     * @return int
+     * @param int $id
+     * @param array $data
+     * @return Article
      */
-    public function update(int $id, array $data): int
+    public function update(int $id, array $data): Article
     {
-        return Article::query()->find('id',$id)->update($data);
+        /** @var Article $article */
+        $article=Article::query()->find($id);
+
+        return $article->fill($data);
     }
 
     /**
@@ -49,7 +52,7 @@ class ArticleService
     public function show(int $id): Article
     {
         /** @var Article $article */
-        $article=Article::query()->findOrFail($id);
+        $article=Article::query()->find($id);
 
         return $article;
     }
@@ -61,7 +64,7 @@ class ArticleService
      */
     public function destroy(int $id): bool
     {
-        return Article::query()->find('id',$id)->find($id);
+        return Article::query()->where('id',$id)->delete();
     }
 
 }

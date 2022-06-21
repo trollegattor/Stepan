@@ -2,10 +2,12 @@
 
 namespace Tests\Feature\article;
 
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
 class IndexArticleTest extends TestCase
 {
+    use DatabaseMigrations;
     /**
      * @return void
      */

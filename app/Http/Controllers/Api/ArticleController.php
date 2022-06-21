@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ShowArticleRequest;
 use App\Http\Requests\StoreArticleRequest;
+use App\Http\Requests\UpdateArticleRequest;
 use App\Http\Resources\ArticleResource;
-use App\Models\Article;
 use App\Services\ArticleService\ArticleService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Throwable;
 
@@ -46,29 +48,26 @@ class ArticleController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param int $id
+     * @param ShowArticleRequest $request
      * @param ArticleService $articleService
      * @return ArticleResource
      */
-    public function show(int $id, ArticleService $articleService): ArticleResource
+    public function show(ShowArticleRequest $request, ArticleService $articleService): ArticleResource
     {
+        $id=$request->route('article');
         $model = $articleService->show($id);
 
         return new ArticleResource($model);
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param StoreArticleRequest $request
-     * @param int $id
+     * @param UpdateArticleRequest $request
      * @param ArticleService $articleService
      * @return ArticleResource
      */
-    public function update(StoreArticleRequest $request, int $id, ArticleService $articleService): ArticleResource
+    public function update(UpdateArticleRequest $request, ArticleService $articleService): ArticleResource
     {
+        $id=$request->route('article');
         $data = [
             'category_id' => $request->input('category_id'),
             'title' => $request->input('title'),
@@ -81,15 +80,15 @@ class ArticleController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
+     * @param ShowArticleRequest $request
      * @param ArticleService $articleService
-     * @return bool
+     * @return JsonResponse
      * @throws Throwable
      */
-    public function destroy(int $id, ArticleService $articleService): bool
+    public function destroy(ShowArticleRequest $request, ArticleService $articleService): JsonResponse
     {
-        return $articleService->destroy($id);
+        $id=$request->route('article');
+
+        return new JsonResponse($articleService->destroy($id));
     }
 }

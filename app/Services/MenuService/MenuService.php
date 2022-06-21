@@ -34,11 +34,14 @@ class MenuService
     /**
      * @param int $id
      * @param array $data
-     * @return int
+     * @return Menu
      */
-    public function update(int $id,array $data): int
+    public function update(int $id,array $data): Menu
     {
-        return Menu::query()->find('id',$id)->update($data);
+        /** @var Menu $menu */
+        $menu=Menu::query()->find($id);
+
+        return $menu->fill($data);
     }
 
     /**
@@ -48,7 +51,7 @@ class MenuService
     public function show(int $id): Menu
     {
         /** @var Menu $menu */
-        $menu=Menu::query()->findOrFail($id);
+        $menu=Menu::query()->find($id);
 
         return $menu;
     }
@@ -60,7 +63,7 @@ class MenuService
      */
     public function destroy(int $id): bool
     {
-        return Menu::query()->find('id',$id)->find($id);
+        return Menu::query()->where('id',$id)->delete();
     }
 
 }

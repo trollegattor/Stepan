@@ -10,11 +10,6 @@ use Tests\TestCase;
 class ShowCategoryTest extends TestCase
 {
     use DatabaseMigrations, WithFaker;
-    public array $data=[
-        'type' => Category::CATEGORY_TYPES['MULTI'],
-        'name' => 'News',
-        'parent_id'=>Category::PARENT_ID['NULL'],
-        ];
 
     /**
      * A basic feature test example.
@@ -23,22 +18,9 @@ class ShowCategoryTest extends TestCase
      */
     public function testCategoryShowSuccessfulGet()
     {
-        Category::query()->create($this->data);
-        Category::factory()->count(10)->create();
-        $count=Category::query()->where('id','!=', null)->first();
-        $this->getJson('/api/category/'.$count->id)
+        Category::factory()->create();
+        $this->getJson('/api/category/1')
             ->assertStatus(200);
-    }
-
-    /**
-     * @return void
-     *
-     */
-    public function testCategoryShowSuccessfulValid()
-    {
-        $category=Category::query()->create($this->data);
-        $this->getJson('/api/category/'.$category->id)
-             ->assertJsonMissingValidationErrors(['id']);
     }
 
     /**
@@ -46,7 +28,7 @@ class ShowCategoryTest extends TestCase
      */
     public function testCategoryShowFailedValid()
     {
-        $this->getJson('/api/category/15686454544')
+        $this->getJson('/api/category/7777777')
             ->assertJsonValidationErrors(['id']);
     }
 }

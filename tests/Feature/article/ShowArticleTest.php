@@ -4,10 +4,13 @@ namespace Tests\Feature\article;
 
 use App\Models\Article;
 use App\Models\Category;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
 class ShowArticleTest extends TestCase
 {
+    use DatabaseMigrations;
+
     /**
      * A basic feature test example.
      *
@@ -15,36 +18,18 @@ class ShowArticleTest extends TestCase
      */
     public function testArticleShowSuccessfulGet()
     {
-        $newsCategory = Category::query()->create([
-            'type' => Category::CATEGORY_TYPES['MULTI'],
-            'name' => 'News',
-            'parent_id' => Category::PARENT_ID['NULL'],
-        ]);
-        Article::factory()->count(10)->create(['category_id' => $newsCategory->id]);
-        $count = Article::query()->where('id', '!=', null)->first();
-        $this->getJson('/api/article/' . $count->id)
+        Article::factory()->create();
+        $this->getJson('/api/article/1' )
             ->assertStatus(200);
     }
 
     /**
      * @return void
      */
-    public function testArticleShowFailedGet()
+    public function testArticleShowFailedValid()
     {
-        $newsCategory = Category::query()->create([
-            'type' => Category::CATEGORY_TYPES['MULTI'],
-            'name' => 'News',
-            'parent_id' => Category::PARENT_ID['NULL'],
-        ]);
-        Article::factory()->count(10)->create(['category_id' => $newsCategory->id]);
-        $count = Article::query();
-        for ($i = 1; $count !== null; $i++)
-        {
-            $count = Article::query()->where('id', '=', $i)->first();
-            $id = $i;
-        }
-        $this->getJson('/api/article/' . $id)
-            ->assertNotFound();
-
+        Article::factory()->create();
+        $this->getJson('/api/article/7777777')
+            ->assertJsonValidationErrors(['id']);
     }
 }

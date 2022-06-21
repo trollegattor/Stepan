@@ -4,13 +4,14 @@ namespace Tests\Feature\article;
 
 use App\Models\Article;
 use App\Models\Category;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class UpdateArticleTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use DatabaseMigrations, WithFaker;
+
     /**
      * A basic feature test example.
      *
@@ -18,25 +19,16 @@ class UpdateArticleTest extends TestCase
      */
     public function testArticleUpdateSuccessful()
     {
-        $newsCategory = Category::query()->create([
-            'type' => Category::CATEGORY_TYPES['MULTI'],
-            'name' => 'News',
-            'parent_id' => Category::PARENT_ID['NULL'],
-        ]);
-        Article::factory()->count(10)->create(['category_id' => $newsCategory->id]);
-        $id = Article::query()
-            ->where('id', '!=', null)
-            ->first();
-
-        $this->patchJson('/api/article/' . $id->id, [
-            'category_id' => $newsCategory->id,
+        Article::factory()->create();
+        $this->patchJson('/api/article/1', [
+            'category_id' => 1,
             'title' => 'Last news',
             'content' => 'Hello from Stepan',
             'author' => Article::ARTICLE_AUTHOR['ADMIN'],
         ])
             ->assertJson(['data' => [
-                'id' => $id->id,
-                'category_id' => $newsCategory->id,
+                'id' => 1,
+                'category_id' => 1,
                 'title' => 'Last news',
                 'content' => 'Hello from Stepan',
                 'author' => Article::ARTICLE_AUTHOR['ADMIN'],
@@ -46,49 +38,12 @@ class UpdateArticleTest extends TestCase
     /**
      * @return void
      */
-    public function testArticleUpdateSuccessfulValid()
-    {
-        $newsCategory = Category::query()->create([
-            'type' => Category::CATEGORY_TYPES['MULTI'],
-            'name' => 'News',
-            'parent_id' => Category::PARENT_ID['NULL'],
-        ]);
-        Article::factory()->count(10)->create(['category_id' => $newsCategory->id]);
-        $id = Article::query()
-            ->where('id', '!=', null)
-            ->first();
-
-        $this->patchJson('/api/article/' . $id->id, [
-            'category_id' => $newsCategory->id,
-            'title' => 'Last news',
-            'content' => 'Hello from Stepan',
-            'author' => Article::ARTICLE_AUTHOR['ADMIN'],
-        ])
-            ->assertJsonMissingValidationErrors([
-                'category_id',
-                'title',
-                'content',
-                'author'
-            ]);
-    }
-
-    /**
-     * @return void
-     */
     public function testArticleUpdateFailedValidFirst()
     {
-        $newsCategory = Category::query()->create([
-            'type' => Category::CATEGORY_TYPES['MULTI'],
-            'name' => 'News',
-            'parent_id' => Category::PARENT_ID['NULL'],
-        ]);
-        Article::factory()->count(10)->create(['category_id' => $newsCategory->id]);
-        $id = Article::query()
-            ->where('id', '!=', null)
-            ->first();
-
-        $this->patchJson('/api/article/' . $id->id, [])
+        Article::factory()->create();
+        $this->patchJson('/api/article/7777777', [])
             ->assertJsonValidationErrors([
+                'id',
                 'category_id',
                 'title',
                 'content',
@@ -101,24 +56,9 @@ class UpdateArticleTest extends TestCase
      */
     public function testArticleUpdateFailedValidSecond()
     {
-        $newsCategory = Category::query()->create([
-            'type' => Category::CATEGORY_TYPES['MULTI'],
-            'name' => 'News',
-            'parent_id' => Category::PARENT_ID['NULL'],
-        ]);
-        Article::factory()->count(10)->create(['category_id' => $newsCategory->id]);
-
-        $id = Article::query()
-            ->where('id', '!=', null)
-            ->first();
-        $count = Category::query();
-        for ($i = 1; $count !== null; $i++)
-        {
-            $count = Category::query()->where('id', '=', $i)->first();
-            $cat_id = $i;
-        }
-        $this->patchJson('/api/article/' . $id->id, [
-            'category_id' => $cat_id,
+        Article::factory()->create();
+        $this->patchJson('/api/article/1', [
+            'category_id' => 7777777,
             'title' => 123,
             'content' => 123,
             'author' => 123,
@@ -136,18 +76,9 @@ class UpdateArticleTest extends TestCase
      */
     public function testArticleUpdateFailedValidThird()
     {
-        $newsCategory = Category::query()->create([
-            'type' => Category::CATEGORY_TYPES['MULTI'],
-            'name' => 'News',
-            'parent_id' => Category::PARENT_ID['NULL'],
-        ]);
-        Article::factory()->count(10)->create(['category_id' => $newsCategory->id]);
-        $id = Article::query()
-            ->where('id', '!=', null)
-            ->first();
-
-        $this->patchJson('/api/article/' . $id->id, [
-            'category_id' => $newsCategory->id,
+        Article::factory()->create();
+        $this->patchJson('/api/article/1', [
+            'category_id' => 1,
             'title' => $this->faker->realTextBetween(201, 300),
             'content' => $this->faker->realTextBetween(15001, 15101),
             'author' => 'error',
@@ -157,32 +88,5 @@ class UpdateArticleTest extends TestCase
                 'content',
                 'author'
             ]);
-    }
-
-    /**
-     * @return void
-     */
-    public function testArticleUpdateFailed()
-    {
-        $newsCategory = Category::query()->create([
-            'type' => Category::CATEGORY_TYPES['MULTI'],
-            'name' => 'News',
-            'parent_id' => Category::PARENT_ID['NULL'],
-        ]);
-        Article::factory()->count(10)->create(['category_id' => $newsCategory->id]);
-
-        $count=Article::query();
-        for($i=1; $count!==null; $i++)
-        {
-            $count=Article::query()->where('id','=',$i)->first();
-            $id=$i;
-        }
-        $this->patchJson('/api/article/' . $id, [
-            'category_id' => $newsCategory->id,
-            'title' => 'Last news',
-            'content' => 'Hello from Stepan',
-            'author' => Article::ARTICLE_AUTHOR['ADMIN'],
-        ])
-            ->assertNotFound();
     }
 }

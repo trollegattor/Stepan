@@ -33,13 +33,16 @@ class CategoryService
     }
 
     /**
-     * @param $id
-     * @param $data
-     * @return int
+     * @param int $id
+     * @param array $data
+     * @return Category
      */
-    public function update(int $id, array $data): int
+    public function update(int $id, array $data): Category
     {
-        return Category::query()->where('id', $id)->update($data);
+        /** @var Category $category */
+        $category=Category::query()->find($id);
+
+        return $category->fill($data);
     }
 
     /**
@@ -48,10 +51,10 @@ class CategoryService
      */
     public function show(int $id): Category
     {
-        /** @var Category $model */
-        $model=Category::query()->find($id);
+        /** @var Category $category */
+        $category=Category::query()->find($id);
 
-        return $model;
+        return $category;
     }
 
     /**

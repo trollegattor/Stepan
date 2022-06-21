@@ -4,70 +4,31 @@ namespace Tests\Feature\menu;
 
 use App\Models\Category;
 use App\Models\Menu;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
 class DestroyMenuTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseMigrations;
+
     /**
      * @return void
      */
     public function testCategoryDestroySuccessfully()
     {
-        $newsCategory = Category::query()->create([
-            'type' => Category::CATEGORY_TYPES['MULTI'],
-            'name' => 'News',
-            'parent_id' => Category::PARENT_ID['NULL'],
-            ]);
-        $firstSubCategory = Category::query()->create([
-            'type' => Category::CATEGORY_TYPES['MULTI'],
-            'name' => 'About Ukraine',
-            'parent_id' => $newsCategory->id,
-            ]);
-        $aboutUsCategory = Category::query()->create([
-            'type' => Category::CATEGORY_TYPES['SINGLE'],
-            'name' => 'About us',
-            'parent_id' => Category::PARENT_ID['NULL'],
-            ]);
-        $contactsCategory = Category::query()->create([
-            'type' => Category::CATEGORY_TYPES['SINGLE'],
-            'name' => 'Contacts',
-            'parent_id' => Category::PARENT_ID['NULL'],
-            ]);
-        $aboutUsMenu = Menu::query()->create([
-            'category_id' => $aboutUsCategory->id,
-            'title' => 'About us',
-            ]);
-        Menu::factory()->count(10)->create([
-            'category_id' => $aboutUsCategory->id,
-            ]);
-        $id = Menu::query()->where('id', '!=', null)->first();
-        $this->deleteJson('/api/menu/' . $id->id)
+        $menu = Menu::factory()->create();
+        $this->deleteJson('/api/menu/1')
             ->assertStatus(200)
-            ->assertJsonMissing($id->attributesToArray());
+            ->assertJsonMissing($menu->attributesToArray());
     }
-    public function testCategoryDestroyFailed()
+
+    /**
+     * @return void
+     */
+    public function testCategoryDestroyFailedValid()
     {
-        $aboutUsCategory = Category::query()->create([
-            'type' => Category::CATEGORY_TYPES['SINGLE'],
-            'name' => 'About us',
-            'parent_id' => Category::PARENT_ID['NULL'],
-        ]);
-        $aboutUsMenu = Menu::query()->create([
-            'category_id' => $aboutUsCategory->id,
-            'title' => 'About us',
-        ]);
-        Menu::factory()->count(10)->create([
-            'category_id' => $aboutUsCategory->id,
-        ]);
-        $count=Menu::query();
-        for($i=1; $count!==null; $i++)
-        {
-            $count=Menu::query()->where('id','=',$i)->first();
-            $id=$i;
-        }
-        $this->deleteJson('/api/menu/' . $id)
-            ->assertNotFound();
+        Menu::factory()->create();
+        $this->deleteJson('/api/menu/7777777')
+            ->assertJsonValidationErrors(['id']);
     }
 }

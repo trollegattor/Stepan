@@ -4,42 +4,32 @@ namespace Tests\Feature\category;
 
 use App\Models\Category;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class DestroyCategoryTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
-
-    public array $data = [
-        'type' => Category::CATEGORY_TYPES['MULTI'],
-        'name' => 'News',
-        'parent_id' => Category::PARENT_ID['NULL'],
-        ];
+    use DatabaseMigrations;
 
     /**
      * @return void
      */
     public function testCategoryDestroySuccessfully()
     {
-        Category::query()->create($this->data);
-        Category::factory()->count(10)->create();
-        $id = Category::query()->where('id', '!=', null)->first();
-        $this->deleteJson('/api/category/' . $id->id)
+        $category=Category::factory()->create(['name' => 'News']);
+        $this->deleteJson('/api/category/1')
             ->assertStatus(200)
-            ->assertJsonMissing($id->attributesToArray());
+            ->assertJsonMissing($category->attributesToArray());
     }
 
     /**
      * @return void
      */
-    public function testCategoryDestroyFailed()
+    public function testCategoryDestroyFailedValid()
     {
-        $category = Category::query()->latest('id')->first()->id ?? 1;
-        $response = $this->deleteJson('/api/category/' . $category + 1);
-        $this->assertEquals('false', $response->getContent());
+        Category::factory()->create(['name' => 'News']);
+        $this->deleteJson('/api/category/7777777')
+            ->assertJsonValidationErrors(['id']);
     }
+
 
 }

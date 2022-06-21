@@ -10,11 +10,6 @@ use Tests\TestCase;
 class UpdateCategoryTest extends TestCase
 {
     use DatabaseMigrations, WithFaker;
-    public array $data = [
-        'type' => Category::CATEGORY_TYPES['MULTI'],
-        'name' => 'News',
-        'parent_id' => Category::PARENT_ID['NULL'],
-    ];
 
     /**
      * A basic feature test example.
@@ -23,51 +18,19 @@ class UpdateCategoryTest extends TestCase
      */
     public function testCategoryUpdateSuccessful()
     {
-        $category = Category::query()->create($this->data);
-        Category::factory()->count(10)->create(['parent_id' => $category->id]);
-        $parentId = Category::query()
-            ->where('name', '=', 'News')
-            ->first();
+        Category::factory()->count(2)->create(['name' => 'News']);
         $newData = [
             'type' => Category::CATEGORY_TYPES['MULTI'],
             'name' => 'Sport',
-            'parent_id' => $parentId->id
+            'parent_id' => 1,
         ];
-        $id = Category::query()
-            ->where('id', '!=', null)
-            ->where('name', '!=', 'News')
-            ->first();
-        $this->patchJson('/api/category/' . $id->id, $newData)
+        $this->patchJson('/api/category/2', $newData)
             ->assertExactJson(['data' => [
-                'id' => $id->id,
+                'id' => 2,
                 'type' => Category::CATEGORY_TYPES['MULTI'],
                 'name' => 'Sport',
-                'parent_id' => $parentId->id,
+                'parent_id' => 1,
             ]]);
-    }
-
-    /**
-     * @return void
-     */
-    public function testCategoryUpdateSuccessfulValid()
-    {
-        Category::query()->create($this->data);
-        Category::factory()->count(10)->create();
-        $parentId = Category::query()
-            ->where('name', '=', 'News')
-            ->first();
-        $newData = [
-            'type' => Category::CATEGORY_TYPES['MULTI'],
-            'name' => 'Sport',
-            'parent_id' => $parentId->id
-        ];
-        $id = Category::query()
-            ->where('id', '!=', null)
-            ->where('name', '!=', 'News')
-            ->first();
-
-        $this->patchJson('/api/category/' . $id->id, $newData)
-            ->assertJsonMissingValidationErrors(['name', 'type', 'parent_id']);
     }
 
     /**
@@ -75,18 +38,12 @@ class UpdateCategoryTest extends TestCase
      */
     public function testCategoryUpdateFailedValidFirst()
     {
-        Category::query()->create($this->data);
-        Category::factory()->count(10)->create();
+        Category::factory()->create(['name' => 'News']);
         $newData = [
             'parent_id' => 'error',
         ];
-        $id = Category::query()
-            ->where('id', '!=', null)
-            ->where('name', '!=', 'News')
-            ->first();
-
-        $this->patchJson('/api/category/' . $id->id, $newData)
-            ->assertJsonValidationErrors(['name', 'type', 'parent_id']);
+        $this->patchJson('/api/category/7777777', $newData)
+            ->assertJsonValidationErrors(['id','name', 'type', 'parent_id']);
     }
 
     /**
@@ -94,18 +51,13 @@ class UpdateCategoryTest extends TestCase
      */
     public function testCategoryUpdateFailedValidSecond()
     {
-        Category::query()->create($this->data);
-        Category::factory()->count(10)->create();
+        Category::factory()->create(['name' => 'News']);
         $newData = [
             'name' => 111,
             'type' => 111,
             'parent_id' => [],
         ];
-        $id = Category::query()
-            ->where('id', '!=', null)
-            ->where('name', '!=', 'News')
-            ->first();
-        $this->patchJson('/api/category/' . $id->id, $newData)
+        $this->patchJson('/api/category/3', $newData)
             ->assertJsonValidationErrors(['name', 'type', 'parent_id']);
     }
 
@@ -114,46 +66,14 @@ class UpdateCategoryTest extends TestCase
      */
     public function testCategoryUpdateFailedValidThird()
     {
-        Category::query()->create($this->data);
-        Category::factory()->count(10)->create();
+        Category::factory()->create(['name' => 'News']);
         $newData = [
             'name' => $this->faker->realTextBetween(201, 300),
             'type' => 'error',
-            'parent_id' => Category::query()
-                ->where('id', '!=', null)
-                ->where('name', '!=', 'News')
-                ->first(),
+            'parent_id' => 2,
         ];
-        $id = Category::query()
-            ->where('id', '!=', null)
-            ->where('name', '!=', 'News')
-            ->first();
-        $this->patchJson('/api/category/' . $id->id, $newData)
+        $this->patchJson('/api/category/3' , $newData)
             ->assertJsonValidationErrors(['name', 'type', 'parent_id']);
     }
 
-    /**
-     * @return void
-     */
-    public function testCategoryUpdateFailed()
-    {
-        Category::query()->create($this->data);
-        Category::factory()->count(10)->create();
-        $parentId = Category::query()
-            ->where('name', '=', 'News')
-            ->first();
-        $newData = [
-            'type' => Category::CATEGORY_TYPES['MULTI'],
-            'name' => 'Sport',
-            'parent_id' => $parentId->id
-        ];
-        $count=Category::query();
-        for($i=1; $count!==null; $i++)
-        {
-            $count=Category::query()->where('id','=',$i)->first();
-            $id=$i;
-        }
-        $this->patchJson('/api/category/' . $id, $newData)
-            ->assertNotFound();
-    }
 }

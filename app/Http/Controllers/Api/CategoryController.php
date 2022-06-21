@@ -34,7 +34,6 @@ class CategoryController extends Controller
     /**
      * @param StoreCategoryRequest $request
      * @param CategoryService $categoryService
-     *
      * @return CategoryResource
      */
     public function store(StoreCategoryRequest $request, CategoryService $categoryService): CategoryResource
@@ -63,7 +62,11 @@ class CategoryController extends Controller
 
     }
 
-   
+    /**
+     * @param UpdateCategoryRequest $request
+     * @param CategoryService $categoryService
+     * @return CategoryResource
+     */
     public function update(UpdateCategoryRequest $request, CategoryService $categoryService): CategoryResource
     {
         $id=$request->route('category');
@@ -78,13 +81,15 @@ class CategoryController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param ShowCategoryRequest $request
      * @param CategoryService $categoryService
      * @return JsonResponse
      * @throws Throwable
      */
-    public function destroy(int $id, CategoryService $categoryService)
+    public function destroy(ShowCategoryRequest $request, CategoryService $categoryService): JsonResponse
     {
+        $id=$request->route('category');
+
         return new JsonResponse($categoryService->destroy($id));
     }
 }

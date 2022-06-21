@@ -4,49 +4,31 @@ namespace Tests\Feature\article;
 
 use App\Models\Article;
 use App\Models\Category;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
 class DestroyArticleTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseMigrations;
 
     /**
      * @return void
      */
     public function testArticleDestroySuccessfully()
     {
-        $newsCategory = Category::query()->create([
-            'type' => Category::CATEGORY_TYPES['MULTI'],
-            'name' => 'News',
-            'parent_id' => Category::PARENT_ID['NULL'],
-        ]);
-        Article::factory()->count(10)->create(['category_id' => $newsCategory->id]);
-        $id = Article::query()
-            ->where('id', '!=', null)
-            ->first();
-        $this->deleteJson('/api/article/' . $id->id)
+        $article=Article::factory()->create();
+        $this->deleteJson('/api/article/1')
             ->assertStatus(200)
-            ->assertJsonMissing($id->attributesToArray());
+            ->assertJsonMissing($article->attributesToArray());
     }
 
     /**
      * @return void
      */
-    public function testArticleDestroyFailed()
+    public function testArticleDestroyFailedValid()
     {
-        $newsCategory = Category::query()->create([
-            'type' => Category::CATEGORY_TYPES['MULTI'],
-            'name' => 'News',
-            'parent_id' => Category::PARENT_ID['NULL'],
-        ]);
-        Article::factory()->count(10)->create(['category_id' => $newsCategory->id]);
-        $count = Article::query();
-        for ($i = 1; $count !== null; $i++) {
-            $count = Article::query()->where('id', '=', $i)->first();
-            $id = $i;
-        }
-        $this->deleteJson('/api/category/' . $id)
-            ->assertNotFound();
+        Article::factory()->create();
+        $this->deleteJson('/api/category/7777777')
+            ->assertJsonValidationErrors(['id']);
     }
 }
