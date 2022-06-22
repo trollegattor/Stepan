@@ -18,6 +18,7 @@ use Throwable;
 
 class CategoryController extends Controller
 {
+//https://laravel.demiart.ru/role-based-api-authentication/
     /**
      * Display a listing of the resource.
      *
