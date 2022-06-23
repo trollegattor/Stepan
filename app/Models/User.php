@@ -3,13 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Model
+class User extends Authenticatable
 {
-    use HasFactory, HasApiTokens;
+    use HasFactory, HasApiTokens, Notifiable;
 
     /**
      * @var string[]
@@ -18,7 +20,7 @@ class User extends Model
         'login',
         'email',
         'password',
-        'role',
+        'role_id',
         'real_name',
         'surname'
     ];
@@ -37,4 +39,13 @@ class User extends Model
     {
         return $this->belongsTo(Role::class);
     }
+
+    /**
+     * @return HasMany
+     */
+    public function article(): HasMany
+    {
+        return $this->hasMany(Article::class);
+    }
 }
+

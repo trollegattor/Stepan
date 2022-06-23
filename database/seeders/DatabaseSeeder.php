@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Models\Article;
 use App\Models\Category;
 use App\Models\Menu;
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -47,15 +49,27 @@ class DatabaseSeeder extends Seeder
             'title' => 'Contacts',
         ]);
         Category::factory()->count(10)->create();
+        $guestRole=Role::query()->create([
+            'role'=>'Guest'
+        ]);
+        $superuserRole=Role::query()->create([
+            'role'=>'superuser'
+        ]);
+        $guestUser=User::factory()->create(['role_id'=>$guestRole->id]);
+        $superuserUser=User::factory()->create(['role_id'=>$superuserRole->id]);
         Article::factory()->create([
             'category_id' => $aboutUsCategory->id,
-            'author' => Article::ARTICLE_AUTHOR['ADMIN'],
+            'user_id' => $guestUser->id,
         ]);
         Article::factory()->create([
             'category_id' => $contactsCategory->id,
-            'author' => Article::ARTICLE_AUTHOR['ADMIN'],
+            'user_id' => $superuserUser->id,
         ]);
         Article::factory()->count(10)->create(['category_id' => $newsCategory->id]);
         Article::factory()->count(10)->create(['category_id' => $firstSubCategory->id]);
+        User::factory()->count(2)->create(['role_id'=>$guestRole->id]);
+        User::factory()->count(2)->create(['role_id'=>$superuserRole->id]);
     }
+
+
 }

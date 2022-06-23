@@ -40,4 +40,12 @@ class Article extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    /**
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }
