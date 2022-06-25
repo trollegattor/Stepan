@@ -2,18 +2,18 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Category;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ShowCategoryRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
+
     public function authorize()
     {
-        return true;
+        $category = Category::query()->find($this->route('category'));
+
+
+        return $this->user()->can('view', $category);
     }
 
     /**
@@ -24,7 +24,7 @@ class ShowCategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'id'=>'exists:categories,id'
+           'id'=>'exists:categories,id'
         ];
     }
 

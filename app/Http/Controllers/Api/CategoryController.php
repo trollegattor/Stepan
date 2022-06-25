@@ -2,23 +2,27 @@
 
 namespace App\Http\Controllers\Api;
 
-
 use App\Http\Requests\UpdateCategoryRequest;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ShowCategoryRequest;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
+use App\Models\User;
 use App\Services\CategoryService\CategoryService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Support\Facades\Validator;
 use Throwable;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class CategoryController extends Controller
 {
-//https://laravel.demiart.ru/role-based-api-authentication/
+
+    /*public function __construct()
+    {
+        $this->authorizeResource(Category::class, 'category');
+    }*/
     /**
      * Display a listing of the resource.
      *
@@ -52,14 +56,16 @@ class CategoryController extends Controller
     /**
      * @param ShowCategoryRequest $request
      * @param CategoryService $categoryService
-     * @return CategoryResource
+     * @return string[]
      */
-    public function show(ShowCategoryRequest $request, CategoryService $categoryService): CategoryResource
+    public function show(ShowCategoryRequest $request, CategoryService $categoryService)
     {
-        $id=$request->route('category');
-        $model = $categoryService->show($id);
+        //print_r($category);
 
-        return new CategoryResource($model);
+        //$id=$request->route('category');
+        //$model = $categoryService->show($id);
+
+        return ['new CategoryResource($model)'];
 
     }
 
@@ -89,6 +95,7 @@ class CategoryController extends Controller
      */
     public function destroy(ShowCategoryRequest $request, CategoryService $categoryService): JsonResponse
     {
+
         $id=$request->route('category');
 
         return new JsonResponse($categoryService->destroy($id));

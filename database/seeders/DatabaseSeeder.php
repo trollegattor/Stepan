@@ -48,13 +48,13 @@ class DatabaseSeeder extends Seeder
             'category_id' => $contactsCategory->id,
             'title' => 'Contacts',
         ]);
+        $superuserRole=Role::query()->create(['role'=>'Superuser']);
+        Role::query()->create(['role'=>'Administrator']);
+        Role::query()->create(['role'=>'Moderator']);
+        Role::query()->create(['role'=>'Writer']);
+        Role::query()->create(['role'=>'Redactor']);
         Category::factory()->count(10)->create();
-        $guestRole=Role::query()->create([
-            'role'=>'Guest'
-        ]);
-        $superuserRole=Role::query()->create([
-            'role'=>'superuser'
-        ]);
+        $guestRole=Role::query()->create(['role'=>'Guest']);
         $guestUser=User::factory()->create(['role_id'=>$guestRole->id]);
         $superuserUser=User::factory()->create(['role_id'=>$superuserRole->id]);
         Article::factory()->create([

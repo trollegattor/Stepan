@@ -24,6 +24,9 @@ class User extends Authenticatable
         'real_name',
         'surname'
     ];
+    protected $hidden=[
+        'password','remember_token',
+    ];
     /**
      * @var string[]
      */
