@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DestroyMenuRequest;
 use App\Http\Requests\ShowMenuRequest;
 use App\Http\Requests\StoreMenuRequest;
 use App\Http\Requests\UpdateMenuRequest;
@@ -75,12 +76,12 @@ class MenuController extends Controller
     }
 
     /**
-     * @param ShowMenuRequest $request
+     * @param DestroyMenuRequest $request
      * @param MenuService $menuService
      * @return JsonResponse
      * @throws Throwable
      */
-    public function destroy(ShowMenuRequest $request, MenuService $menuService): JsonResponse
+    public function destroy(DestroyMenuRequest $request, MenuService $menuService): JsonResponse
     {
         $id=$request->route('menu');
 

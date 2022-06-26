@@ -40,8 +40,9 @@ class MenuService
     {
         /** @var Menu $menu */
         $menu=Menu::query()->find($id);
+        $menu->update($data);
 
-        return $menu->fill($data);
+        return $menu;
     }
 
     /**

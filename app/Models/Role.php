@@ -14,7 +14,45 @@ class Role extends Model
      * @var string[]
      */
     public $fillable = [
-        'role',
+        'name',
+        'category_index',
+        'category_store',
+        'category_show',
+        'category_update',
+        'category_destroy',
+
+
+        'menu_index',
+        'menu_store',
+        'menu_show',
+        'menu_update',
+        'menu_destroy',
+
+
+        'article_index',
+        'article_store',
+        'article_show_all',
+        'article_show_own',
+        'article_update_all',
+        'article_update_own',
+        'article_destroy_all',
+        'article_destroy_own',
+
+        'user_index',
+        'user_store',
+        'user_show_all',
+        'user_show_own',
+        'user_update_all',
+        'user_update_own',
+        'user_destroy_all',
+        'user_destroy_own',
+
+        'role_index',
+        'role_store',
+        'role_show',
+        'role_update_all',
+        'role_destroy_all',
+
     ];
     /**
      * @var string[]

@@ -2,27 +2,19 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\DestroyCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ShowCategoryRequest;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Resources\CategoryResource;
-use App\Models\Category;
-use App\Models\User;
 use App\Services\CategoryService\CategoryService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Throwable;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-
 class CategoryController extends Controller
 {
 
-    /*public function __construct()
-    {
-        $this->authorizeResource(Category::class, 'category');
-    }*/
     /**
      * Display a listing of the resource.
      *
@@ -56,16 +48,14 @@ class CategoryController extends Controller
     /**
      * @param ShowCategoryRequest $request
      * @param CategoryService $categoryService
-     * @return string[]
+     * @return CategoryResource
      */
-    public function show(ShowCategoryRequest $request, CategoryService $categoryService)
+    public function show(ShowCategoryRequest $request, CategoryService $categoryService): CategoryResource
     {
-        //print_r($category);
+        $id=$request->route('category');
+        $model = $categoryService->show($id);
 
-        //$id=$request->route('category');
-        //$model = $categoryService->show($id);
-
-        return ['new CategoryResource($model)'];
+        return new CategoryResource($model);
 
     }
 
@@ -88,14 +78,13 @@ class CategoryController extends Controller
     }
 
     /**
-     * @param ShowCategoryRequest $request
+     * @param DestroyCategoryRequest $request
      * @param CategoryService $categoryService
      * @return JsonResponse
      * @throws Throwable
      */
-    public function destroy(ShowCategoryRequest $request, CategoryService $categoryService): JsonResponse
+    public function destroy(DestroyCategoryRequest $request, CategoryService $categoryService): JsonResponse
     {
-
         $id=$request->route('category');
 
         return new JsonResponse($categoryService->destroy($id));

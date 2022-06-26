@@ -41,8 +41,9 @@ class CategoryService
     {
         /** @var Category $category */
         $category=Category::query()->find($id);
+        $category->update($data);
 
-        return $category->fill($data);
+        return $category;
     }
 
     /**

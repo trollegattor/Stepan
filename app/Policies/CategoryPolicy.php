@@ -18,7 +18,7 @@ class CategoryPolicy
      * Determine whether the user can view any models.
      *
      * @param User $user
-     * @return Response|bool
+     * @return bool
      */
     public function viewAny(User $user)
     {
@@ -32,32 +32,13 @@ class CategoryPolicy
      */
     public function view(User $user, Category $category)
     {
-
-
-        print_r('Policy work');
-
         return true;
     }
 
 
     public function create(User $user)
     {
-        $a=Role::query()->where('role','Superuser')
-            ->orwhere('role','Administrator')
-           // ->where('role','Moderator')
-            ->get();
-        print_r($a);
-
-
-
-        if($user->role_id===Role::query()->where('role','Superuser')->first()->id
-            ||Role::query()->where('role','Administrator')->first()->id
-            ||Role::query()->where('role','Moderator')->first()->id)
-        {
-            return true;
-        }
-
-        return false;
+        return $user->role->category_store;
     }
 
     /**
@@ -65,11 +46,11 @@ class CategoryPolicy
      *
      * @param User $user
      * @param Category $category
-     * @return Response|bool
+     * @return bool
      */
-    public function update(User $user, Category $category)
+    public function update(User $user, Category $category): bool
     {
-        return true;
+        return $user->role->category_update;
     }
 
     /**
@@ -81,7 +62,7 @@ class CategoryPolicy
      */
     public function delete(User $user, Category $category)
     {
-        return true;
+        return $user->role->category_destroy;
     }
 
     /**

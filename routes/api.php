@@ -32,8 +32,8 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::apiResources(['category' => CategoryController::class]);
     Route::apiResources(['article' => ArticleController::class,]);
     Route::apiResources(['menu' => MenuController::class,]);
-
 });
+
 
 
 

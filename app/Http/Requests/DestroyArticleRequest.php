@@ -2,18 +2,20 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Menu;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreMenuRequest extends FormRequest
+class DestroyArticleRequest extends FormRequest
 {
     /**
+     * Determine if the user is authorized to make this request.
+     *
      * @return bool
      */
-    public function authorize(): bool
+    public function authorize()
     {
-        return $this->user()->can('create', Menu::class);
+        return false;
     }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -22,8 +24,7 @@ class StoreMenuRequest extends FormRequest
     public function rules()
     {
         return [
-            'category_id' => ['required', 'exists:categories,id'],
-            'title' => ['required', 'string', 'max:200'],
+            //
         ];
     }
 }

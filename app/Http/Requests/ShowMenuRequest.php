@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Menu;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ShowMenuRequest extends FormRequest
@@ -11,7 +12,7 @@ class ShowMenuRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(Menu $menu)
     {
         return true;
     }
@@ -19,7 +20,7 @@ class ShowMenuRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, mixed>
+     * @return array
      */
     public function rules()
     {

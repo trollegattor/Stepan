@@ -41,6 +41,7 @@ class ArticleService
     {
         /** @var Article $article */
         $article=Article::query()->find($id);
+        print_r($article);
 
         return $article->fill($data);
     }

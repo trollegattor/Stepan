@@ -2,25 +2,25 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Category;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class UpdateCategoryRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
-     *
+     * @param Category $category
      * @return bool
      */
-    public function authorize()
+    public function authorize(Category $category): bool
     {
-        return true;
+        return $this->user()->can('update', $category);
     }
 
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, mixed>
+     * @return array
      */
     public function rules()
     {

@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Models\Menu;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateMenuRequest extends FormRequest
+class DestroyMenuRequest extends FormRequest
 {
     /**
      * @param Menu $menu
@@ -13,7 +13,7 @@ class UpdateMenuRequest extends FormRequest
      */
     public function authorize(Menu $menu): bool
     {
-        return $this->user()->can('update',$menu);
+        return $this->user()->can('delete',$menu);
     }
 
     /**
@@ -24,9 +24,7 @@ class UpdateMenuRequest extends FormRequest
     public function rules()
     {
         return [
-            'id'=>'exists:menus,id',
-            'category_id' => ['required', 'exists:categories,id'],
-            'title' => ['required', 'string', 'max:200'],
+            'id'=>'exists:menus,id'
         ];
     }
 

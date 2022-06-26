@@ -5,14 +5,15 @@ namespace App\Http\Requests;
 use App\Models\Category;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ShowCategoryRequest extends FormRequest
+class DestroyCategoryRequest extends FormRequest
 {
     /**
+     * @param Category $category
      * @return bool
      */
-    public function authorize(): bool
+    public function authorize(Category $category): bool
     {
-        return true;
+        return  $this->user()->can('delete', $category);
     }
 
     /**
@@ -23,7 +24,7 @@ class ShowCategoryRequest extends FormRequest
     public function rules()
     {
         return [
-           'id'=>'exists:categories,id'
+            'id'=>'exists:categories,id'
         ];
     }
 
