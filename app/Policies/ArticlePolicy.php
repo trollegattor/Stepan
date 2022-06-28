@@ -2,11 +2,12 @@
 
 namespace App\Policies;
 
-use App\Models\Menu;
+
+use App\Models\Article;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class MenuPolicy
+class ArticlePolicy
 {
     use HandlesAuthorization;
 
@@ -34,24 +35,31 @@ class MenuPolicy
      */
     public function create(User $user): bool
     {
-        return $user->role->menu_store;
+        return $user->role->article_store;
     }
 
     /**
      * @param User $user
+     * @param Article $article
      * @return bool
      */
-    public function update(User $user): bool
+    public function update(User $user, Article $article): bool
     {
-        return $user->role->menu_update;
+        return $user->role->article_update_all
+            || ($user->role->article_update_own and $user->id == $article->user_id);
+
     }
 
     /**
+     * Determine whether the user can delete the model.
+     *
      * @param User $user
+     * @param Article $article
      * @return bool
      */
-    public function delete(User $user): bool
+    public function delete(User $user, Article $article): bool
     {
-        return $user->role->menu_destroy;
+        return $user->role->article_destroy_all
+            || ($user->role->article_destroy_own and $user->id == $article->user_id);
     }
 }

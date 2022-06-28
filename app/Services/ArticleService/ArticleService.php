@@ -3,10 +3,7 @@
 namespace App\Services\ArticleService;
 
 use App\Models\Article;
-use App\Models\Category;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use Throwable;
 
 class ArticleService
@@ -41,9 +38,9 @@ class ArticleService
     {
         /** @var Article $article */
         $article=Article::query()->find($id);
-        print_r($article);
+        $article->update($data);
 
-        return $article->fill($data);
+        return $article;
     }
 
     /**

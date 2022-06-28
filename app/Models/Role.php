@@ -31,8 +31,7 @@ class Role extends Model
 
         'article_index',
         'article_store',
-        'article_show_all',
-        'article_show_own',
+        'article_show',
         'article_update_all',
         'article_update_own',
         'article_destroy_all',

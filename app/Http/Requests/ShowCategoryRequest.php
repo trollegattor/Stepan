@@ -7,6 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class ShowCategoryRequest extends FormRequest
 {
+
     /**
      * @return bool
      */
@@ -23,7 +24,7 @@ class ShowCategoryRequest extends FormRequest
     public function rules()
     {
         return [
-           'id'=>'exists:categories,id'
+            'id' => 'exists:categories,id'
         ];
     }
 

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DestroyArticleRequest;
 use App\Http\Requests\ShowArticleRequest;
 use App\Http\Requests\StoreArticleRequest;
 use App\Http\Requests\UpdateArticleRequest;
 use App\Http\Resources\ArticleResource;
+use App\Models\Article;
 use App\Services\ArticleService\ArticleService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -72,7 +74,7 @@ class ArticleController extends Controller
             'category_id' => $request->input('category_id'),
             'title' => $request->input('title'),
             'content' => $request->input('content'),
-            'author' => $request->input('author'),
+            'user_id' => $request->input('user_id'),
         ];
         $updateArticle = $articleService->update($id, $data);
 
@@ -80,12 +82,12 @@ class ArticleController extends Controller
     }
 
     /**
-     * @param ShowArticleRequest $request
+     * @param DestroyArticleRequest $request
      * @param ArticleService $articleService
      * @return JsonResponse
      * @throws Throwable
      */
-    public function destroy(ShowArticleRequest $request, ArticleService $articleService): JsonResponse
+    public function destroy(DestroyArticleRequest $request, ArticleService $articleService): JsonResponse
     {
         $id=$request->route('article');
 

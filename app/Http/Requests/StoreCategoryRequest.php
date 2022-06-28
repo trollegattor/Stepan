@@ -15,6 +15,7 @@ class StoreCategoryRequest extends FormRequest
     {
         return $this->user()->can('create', Category::class);
     }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -23,10 +24,10 @@ class StoreCategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'=>['required', 'string', 'max:200'],
-            'type'=>['required', 'string', 'in:single,multiple'],
-            'parent_id'=>['integer', 'nullable',
-                Rule::exists('categories','id')->where('name','News'),
+            'name' => ['required', 'string', 'max:200'],
+            'type' => ['required', 'string', 'in:single,multiple'],
+            'parent_id' => ['integer', 'nullable',
+                Rule::exists('categories', 'id')->where('name', 'News'),
             ],
         ];
     }

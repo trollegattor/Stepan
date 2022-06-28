@@ -2,12 +2,11 @@
 
 namespace App\Providers;
 
-use App\Http\Controllers\Api\CategoryController;
+use App\Models\Article;
 use App\Models\Category;
 use App\Models\User;
-use App\Policies\CategoryPolicy;
+use App\Policies\ArticlePolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -17,7 +16,8 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        //Category::class=>CategoryPolicy::class,
+        // Article::class=>ArticlePolicy::class,
+        //'App\Models\Article' => 'App\Policies\ArticlePolicy',
         //'App\Models\Category' => 'App\Policies\CategoryPolicy',
     ];
 

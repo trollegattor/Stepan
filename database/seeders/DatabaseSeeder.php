@@ -67,8 +67,7 @@ class DatabaseSeeder extends Seeder
 
             'article_index'=>true,
             'article_store'=>true,
-            'article_show_all'=>true,
-            'article_show_own'=>true,
+            'article_show'=>true,
             'article_update_all'=>true,
             'article_update_own'=>true,
             'article_destroy_all'=>true,
@@ -108,8 +107,7 @@ class DatabaseSeeder extends Seeder
 
             'article_index'=>true,
             'article_store'=>true,
-            'article_show_all'=>true,
-            'article_show_own'=>true,
+            'article_show'=>true,
             'article_update_all'=>true,
             'article_update_own'=>true,
             'article_destroy_all'=>true,
@@ -150,8 +148,7 @@ class DatabaseSeeder extends Seeder
 
             'article_index'=>true,
             'article_store'=>true,
-            'article_show_all'=>true,
-            'article_show_own'=>true,
+            'article_show'=>true,
             'article_update_all'=>true,
             'article_update_own'=>true,
             'article_destroy_all'=>true,
@@ -193,8 +190,7 @@ class DatabaseSeeder extends Seeder
 
             'article_index'=>true,
             'article_store'=>true,
-            'article_show_all'=>true,
-            'article_show_own'=>true,
+            'article_show'=>true,
             'article_update_all'=>false,
             'article_update_own'=>true,
             'article_destroy_all'=>false,
@@ -235,8 +231,7 @@ class DatabaseSeeder extends Seeder
 
             'article_index'=>true,
             'article_store'=>false,
-            'article_show_all'=>true,
-            'article_show_own'=>true,
+            'article_show'=>true,
             'article_update_all'=>true,
             'article_update_own'=>true,
             'article_destroy_all'=>false,
@@ -277,8 +272,7 @@ class DatabaseSeeder extends Seeder
 
             'article_index'=>true,
             'article_store'=>false,
-            'article_show_all'=>true,
-            'article_show_own'=>true,
+            'article_show'=>true,
             'article_update_all'=>false,
             'article_update_own'=>false,
             'article_destroy_all'=>false,
@@ -300,6 +294,14 @@ class DatabaseSeeder extends Seeder
             'role_destroy'=>false,
 
         ]);
+       User::factory()->create([
+           'role_id'=>$superuserRole->id,
+           'login' => 'ollegg',
+            'password' => bcrypt('00000000'),
+            'email' => 'oleg@gmail.com',
+            'real_name' => 'oleg',
+            'surname' =>'Malin' ,
+       ]);
         Category::factory()->count(10)->create();
         $guestUser=User::factory()->create(['role_id'=>$guestRole->id]);
         $superuserUser=User::factory()->create(['role_id'=>$superuserRole->id]);

@@ -2,33 +2,34 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Article;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateArticleRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
-     *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return true;
+        $article = Article::query()->find($this->route('article'));
+
+        return $this->user()->can('update',$article);
     }
 
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, mixed>
+     * @return array
      */
     public function rules()
     {
         return [
             'id'=>'exists:articles,id',
-            'category_id' => ['required', 'exists:categories,id'],
+           'category_id' => ['required', 'exists:categories,id'],
             'title' => ['required', 'string', 'max:200'],
             'content' => ['required', 'string', 'max:15000'],
-            'author' => ['required', 'string', 'in:admin,user']
+            'user_id' => ['required', 'integer', 'exists:users,id']
         ];
     }
 

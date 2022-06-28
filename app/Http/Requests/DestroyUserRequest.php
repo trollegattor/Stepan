@@ -2,19 +2,18 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Category;
 use Illuminate\Foundation\Http\FormRequest;
 
-class DestroyCategoryRequest extends FormRequest
+class DestroyUserRequest extends FormRequest
 {
     /**
+     * Determine if the user is authorized to make this request.
+     *
      * @return bool
      */
-    public function authorize(): bool
+    public function authorize()
     {
-        $category = Category::query()->find($this->route('category'));
-
-        return $this->user()->can('delete', $category);
+        return true;
     }
 
     /**
@@ -25,7 +24,7 @@ class DestroyCategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'exists:categories,id'
+            'id' => 'exists:users,id'
         ];
     }
 
@@ -34,6 +33,6 @@ class DestroyCategoryRequest extends FormRequest
      */
     protected function prepareForValidation()
     {
-        $this->merge(['id' => request()->route('category')]);
+        $this->merge(['id' => request()->route('user')]);
     }
 }

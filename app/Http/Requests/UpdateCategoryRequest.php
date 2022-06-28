@@ -9,11 +9,12 @@ use Illuminate\Validation\Rule;
 class UpdateCategoryRequest extends FormRequest
 {
     /**
-     * @param Category $category
      * @return bool
      */
-    public function authorize(Category $category): bool
+    public function authorize(): bool
     {
+        $category = Category::query()->find($this->route('category'));
+
         return $this->user()->can('update', $category);
     }
 
@@ -25,11 +26,11 @@ class UpdateCategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'id'=>'exists:categories,id',
-            'name'=>['required', 'string', 'max:200'],
-            'type'=>['required', 'string', 'in:single,multiple'],
-            'parent_id'=>['integer', 'nullable',
-                Rule::exists('categories','id')->where('name','News'),
+            'id' => 'exists:categories,id',
+            'name' => ['required', 'string', 'max:200'],
+            'type' => ['required', 'string', 'in:single,multiple'],
+            'parent_id' => ['integer', 'nullable',
+                Rule::exists('categories', 'id')->where('name', 'News'),
             ],
         ];
     }

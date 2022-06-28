@@ -14,10 +14,11 @@ class StoreMenuRequest extends FormRequest
     {
         return $this->user()->can('create', Menu::class);
     }
+
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, mixed>
+     * @return array<
      */
     public function rules()
     {

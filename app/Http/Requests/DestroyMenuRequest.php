@@ -8,12 +8,13 @@ use Illuminate\Foundation\Http\FormRequest;
 class DestroyMenuRequest extends FormRequest
 {
     /**
-     * @param Menu $menu
      * @return bool
      */
-    public function authorize(Menu $menu): bool
+    public function authorize(): bool
     {
-        return $this->user()->can('delete',$menu);
+        $menu = Menu::query()->find($this->route('menu'));
+
+        return $this->user()->can('delete', $menu);
     }
 
     /**
@@ -24,7 +25,7 @@ class DestroyMenuRequest extends FormRequest
     public function rules()
     {
         return [
-            'id'=>'exists:menus,id'
+            'id' => 'exists:menus,id'
         ];
     }
 

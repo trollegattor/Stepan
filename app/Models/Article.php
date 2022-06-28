@@ -22,7 +22,7 @@ class Article extends Model
         'category_id',
         'title',
         'content',
-        'author',
+        'user_id',
     ];
 
     /**

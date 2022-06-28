@@ -12,7 +12,7 @@ class ShowMenuRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize(Menu $menu)
+    public function authorize(): bool
     {
         return true;
     }
@@ -25,7 +25,7 @@ class ShowMenuRequest extends FormRequest
     public function rules()
     {
         return [
-            'id'=>'exists:menus,id'
+            'id' => 'exists:menus,id'
         ];
     }
 

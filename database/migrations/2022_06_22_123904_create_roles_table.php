@@ -31,8 +31,7 @@ return new class extends Migration
 
             $table->boolean('article_index')->default(false);
             $table->boolean('article_store')->default(false);
-            $table->boolean('article_show_all')->default(false);
-            $table->boolean('article_show_own')->default(false);
+            $table->boolean('article_show')->default(false);
             $table->boolean('article_update_all')->default(false);
             $table->boolean('article_update_own')->default(false);
             $table->boolean('article_destroy_all')->default(false);

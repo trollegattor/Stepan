@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Article;
 use Illuminate\Foundation\Http\FormRequest;
 
 class DestroyArticleRequest extends FormRequest
@@ -11,9 +12,11 @@ class DestroyArticleRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return false;
+        $article = Article::find($this->route('article'));
+
+        return $this->user()->can('delete',$article);
     }
 
     /**
@@ -24,7 +27,15 @@ class DestroyArticleRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'id'=>'exists:articles,id'
         ];
+    }
+
+    /**
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        $this->merge(['id' => request()->route('article')]);
     }
 }
