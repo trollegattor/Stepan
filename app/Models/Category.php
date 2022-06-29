@@ -15,9 +15,6 @@ class Category extends Model
         'SINGLE' => 'single',
         'MULTI' => 'multiple',
     ];
-    public const PARENT_ID = [
-        'NULL' => null,
-    ];
 
     /**
      * @var bool

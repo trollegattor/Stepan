@@ -26,7 +26,6 @@ class StoreArticleRequest extends FormRequest
             'category_id' => ['required', 'exists:categories,id'],
             'title' => ['required', 'string', 'max:200'],
             'content' => ['required', 'string', 'max:15000'],
-            'author' => ['required', 'string', 'in:admin,user']
         ];
     }
 }

@@ -1,90 +1,93 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\DestroyMenuRequest;
 use App\Http\Requests\ShowMenuRequest;
 use App\Http\Requests\StoreMenuRequest;
 use App\Http\Requests\UpdateMenuRequest;
 use App\Http\Resources\MenuResource;
-use App\Models\Menu;
+use App\Http\Resources\MenuResourceCollection;
 use App\Services\MenuService\MenuService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Http\Resources\Json\JsonResource;
 use Throwable;
 
 class MenuController extends Controller
 {
+    /** @var MenuService $menuService */
+    public MenuService $menuService;
+
     /**
      * @param MenuService $menuService
-     * @return AnonymousResourceCollection
      */
-    public function index(MenuService $menuService): AnonymousResourceCollection
+    public function __construct(MenuService $menuService)
     {
-        $menu = $menuService->getAll();
+        $this->menuService = $menuService;
+    }
 
-        return MenuResource::collection($menu);
+    /**
+     * @return MenuResourceCollection
+     */
+    public function index(): MenuResourceCollection
+    {
+        $menu = $this->menuService->getAll();
+
+        return new MenuResourceCollection($menu);
     }
 
     /**
      * @param StoreMenuRequest $request
-     * @param MenuService $menuService
      * @return MenuResource
      */
-    public function store(StoreMenuRequest $request, MenuService $menuService): MenuResource
+    public function store(StoreMenuRequest $request,): MenuResource
     {
         $data = [
             'category_id' => $request->input('category_id'),
             'title' => $request->input('title'),
         ];
-        $newMenu = $menuService->create($data);
+        $newMenu = $this->menuService->create($data);
 
         return new MenuResource($newMenu);
     }
 
     /**
      * @param ShowMenuRequest $request
-     * @param MenuService $menuService
      * @return MenuResource
      */
-    public function show(ShowMenuRequest $request, MenuService $menuService): MenuResource
+    public function show(ShowMenuRequest $request): MenuResource
     {
-        $id=$request->route('menu');
-        $model = $menuService->show($id);
+        $id = $request->route('menu');
+        $model = $this->menuService->show($id);
 
         return new MenuResource($model);
     }
 
     /**
      * @param UpdateMenuRequest $request
-     * @param MenuService $menuService
      * @return MenuResource
      */
-    public function update(UpdateMenuRequest $request, MenuService $menuService): MenuResource
+    public function update(UpdateMenuRequest $request): MenuResource
     {
-        $id=$request->route('menu');
+        $id = $request->route('menu');
         $data = [
             'category_id' => $request->input('category_id'),
             'title' => $request->input('title'),
         ];
-        $updateMenu = $menuService->update($id, $data);
+        $updateMenu = $this->menuService->update($id, $data);
 
         return new MenuResource($updateMenu);
     }
 
     /**
      * @param DestroyMenuRequest $request
-     * @param MenuService $menuService
      * @return JsonResponse
      * @throws Throwable
      */
-    public function destroy(DestroyMenuRequest $request, MenuService $menuService): JsonResponse
+    public function destroy(DestroyMenuRequest $request): JsonResponse
     {
-        $id=$request->route('menu');
+        $id = $request->route('menu');
 
-        return new JsonResponse($menuService->destroy($id));
+        return new JsonResponse($this->menuService->destroy($id));
     }
 }

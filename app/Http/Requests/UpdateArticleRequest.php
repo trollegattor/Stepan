@@ -29,7 +29,6 @@ class UpdateArticleRequest extends FormRequest
            'category_id' => ['required', 'exists:categories,id'],
             'title' => ['required', 'string', 'max:200'],
             'content' => ['required', 'string', 'max:15000'],
-            'user_id' => ['required', 'integer', 'exists:users,id']
         ];
     }
 

@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
         $newsCategory = Category::query()->create([
             'type' => Category::CATEGORY_TYPES['MULTI'],
             'name' => 'News',
-            'parent_id' => Category::PARENT_ID['NULL'],
+            'parent_id' => null,
         ]);
         $firstSubCategory = Category::query()->create([
             'type' => Category::CATEGORY_TYPES['MULTI'],
@@ -29,12 +29,12 @@ class DatabaseSeeder extends Seeder
         $aboutUsCategory = Category::query()->create([
             'type' => Category::CATEGORY_TYPES['SINGLE'],
             'name' => 'About us',
-            'parent_id' => Category::PARENT_ID['NULL'],
+            'parent_id' => null,
         ]);
         $contactsCategory = Category::query()->create([
             'type' => Category::CATEGORY_TYPES['SINGLE'],
             'name' => 'Contacts',
-            'parent_id' => Category::PARENT_ID['NULL'],
+            'parent_id' => null,
         ]);
         $aboutUsMenu = Menu::query()->create([
             'category_id' => $aboutUsCategory->id,

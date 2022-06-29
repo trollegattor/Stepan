@@ -52,7 +52,6 @@ return new class extends Migration
             $table->boolean('role_update')->default(false);
             $table->boolean('role_destroy')->default(false);
 
-
             $table->timestamps();
         });
     }

@@ -2,6 +2,7 @@
 
 namespace App\Services\CategoryService;
 
+use App\Http\Requests\StoreCategoryRequest;
 use App\Models\Category;
 use Illuminate\Database\Eloquent\Collection;
 use Throwable;
@@ -20,8 +21,13 @@ class CategoryService
      * @param array $data
      * @return Category
      */
-    public function create(array $data): Category
+    public function create(StoreCategoryRequest $request): Category
     {
+        $data = [
+            'name' => $request->input('name'),
+            'type' => $request->input('type'),
+            'parent_id' => $request->input('parent_id'),
+        ];
         /** @var Category $category */
         $category = Category::query()->create($data);
 

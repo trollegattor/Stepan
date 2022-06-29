@@ -2,7 +2,6 @@
 
 namespace App\Services\MenuService;
 
-use App\Services\CategoryService\CategoryService;
 use Illuminate\Support\ServiceProvider;
 
 class MenuServiceProvider extends ServiceProvider

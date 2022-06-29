@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreRoleRequest extends FormRequest
+class UpdateRoleRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -19,13 +19,14 @@ class StoreRoleRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, mixed>
+     * @return array
      */
     public function rules()
     {
         return [
+            'id' => 'exists:roles,id',
 
-            'name'=>['required', 'string', 'max:50','unique:App\Models\Role,name'],
+            'name'=>['string', 'max:50','unique:App\Models\Role,name'],
 
             'category_index'=>['boolean'],
             'category_store'=>['boolean'],
@@ -64,5 +65,13 @@ class StoreRoleRequest extends FormRequest
             'role_update'=>['boolean'],
             'role_destroy'=>['boolean'],
         ];
+    }
+
+    /**
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        $this->merge(['id' => request()->route('role')]);
     }
 }

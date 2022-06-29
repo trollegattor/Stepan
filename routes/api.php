@@ -1,13 +1,12 @@
 <?php
 
-use App\Http\Controllers\Api\ArticleController;
-use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\CategoryController;
-use App\Http\Controllers\Api\MenuController;
-use App\Http\Controllers\Api\RoleController;
-use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\MenuController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-
 
 
 /*
