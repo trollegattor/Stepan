@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
 class DestroyUserRequest extends FormRequest
@@ -11,9 +12,13 @@ class DestroyUserRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return true;
+        $id = $this->route('user');
+        $user = User::query()->find($id);
+        $this->user = $user;
+
+        return $this->user()->can('delete', $user);
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ShowUserRequest extends FormRequest
@@ -11,9 +12,12 @@ class ShowUserRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return true;
+        $id = $this->route('user');
+        $user = User::query()->find($id);
+
+        return $this->user()->can('view', $user);
     }
 
     /**
@@ -24,7 +28,7 @@ class ShowUserRequest extends FormRequest
     public function rules()
     {
         return [
-           'id' => 'exists:users,id'
+            'id' => 'exists:users,id'
         ];
     }
 

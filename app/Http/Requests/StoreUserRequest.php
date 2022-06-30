@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -12,9 +13,9 @@ class StoreUserRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return true;
+        return $this->user()->can('create', User::class);
     }
 
     /**
@@ -25,10 +26,10 @@ class StoreUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'login' => ['required', 'string', 'max:50'],
+            'login' => ['required', 'string', 'max:50','unique:App\Models\User,login'],
             'password' => ['required', 'min:8'],
-            'email' => ['email:rfc','unique:App\Models\User,email'],
-            'role_id' => ['required', 'exists:roles,id',Rule::notIn([1,2,3])],
+            'email' => ['email:rfc', 'unique:App\Models\User,email'],
+            'role_id' => ['required', 'exists:roles,id', Rule::notIn([1, 2, 3])],
             'real_name' => ['required', 'string', 'max:50'],
             'surname' => ['required', 'string', 'max:50'],
         ];

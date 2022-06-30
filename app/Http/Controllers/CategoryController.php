@@ -42,7 +42,6 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request): CategoryResource
     {
-
         $newCategory = $this->categoryService->create($request);
 
         return new CategoryResource($newCategory);
@@ -54,8 +53,7 @@ class CategoryController extends Controller
      */
     public function show(ShowCategoryRequest $request): CategoryResource
     {
-        $id = $request->route('category');
-        $model = $this->categoryService->show($id);
+        $model = $this->categoryService->show($request);
 
         return new CategoryResource($model);
 
@@ -67,13 +65,7 @@ class CategoryController extends Controller
      */
     public function update(UpdateCategoryRequest $request): CategoryResource
     {
-        $id = $request->route('category');
-        $data = [
-            'name' => $request->input('name'),
-            'type' => $request->input('type'),
-            'parent_id' => $request->input('parent_id')
-        ];
-        $updateCategory = $this->categoryService->update($id, $data);
+        $updateCategory = $this->categoryService->update($request);
 
         return new CategoryResource($updateCategory);
     }
@@ -81,12 +73,9 @@ class CategoryController extends Controller
     /**
      * @param DestroyCategoryRequest $request
      * @return JsonResponse
-     * @throws Throwable
      */
     public function destroy(DestroyCategoryRequest $request): JsonResponse
     {
-        $id = $request->route('category');
-
-        return new JsonResponse($this->categoryService->destroy($id));
+        return new JsonResponse($this->categoryService->destroy($request));
     }
 }

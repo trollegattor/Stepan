@@ -2,11 +2,10 @@
 
 namespace App\Policies;
 
-use App\Models\Role;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class RolePolice
+class RolePolicy
 {
     use HandlesAuthorization;
 
@@ -16,79 +15,42 @@ class RolePolice
      */
     public function viewAny(User $user): bool
     {
-       // print_r([$user->login]);
-        print_r([$user->role->name]);
         return $user->role->role_index;
     }
 
     /**
-     * Determine whether the user can view the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Role  $role
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @param User $user
+     * @return bool
      */
-    public function view(User $user, Role $role)
+    public function view(User $user): bool
     {
-        //
+        return $user->role->role_show;
     }
 
     /**
-     * Determine whether the user can create models.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @param User $user
+     * @return bool
      */
-    public function create(User $user)
+    public function create(User $user): bool
     {
-        //
+        return $user->role->role_store;
     }
 
     /**
-     * Determine whether the user can update the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Role  $role
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @param User $user
+     * @return bool
      */
-    public function update(User $user, Role $role)
+    public function update(User $user): bool
     {
-        //
+        return $user->role->role_update;
     }
 
     /**
-     * Determine whether the user can delete the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Role  $role
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @param User $user
+     * @return bool
      */
-    public function delete(User $user, Role $role)
+    public function delete(User $user): bool
     {
-        //
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Role  $role
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function restore(User $user, Role $role)
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Role  $role
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function forceDelete(User $user, Role $role)
-    {
-        //
+        return $user->role->role_destroy;
     }
 }

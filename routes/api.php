@@ -21,12 +21,18 @@ Route::prefix('/sanctum')->group(function() {
 });
 
 Route::middleware('auth:sanctum')->group(function() {
+    Route::get('user',[UserController::class,'index']);
+
+
+
     Route::apiResources(['category' => CategoryController::class]);
     Route::apiResources(['article' => ArticleController::class,]);
     Route::apiResources(['menu' => MenuController::class,]);
-    Route::apiResources(['user' => UserController::class,]);
+    //Route::apiResources(['user' => UserController::class,]);
     Route::apiResources(['role' => RoleController::class,]);
 });
+
+
 
 
 

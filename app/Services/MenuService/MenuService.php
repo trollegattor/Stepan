@@ -2,11 +2,12 @@
 
 namespace App\Services\MenuService;
 
+use App\Http\Requests\DestroyMenuRequest;
+use App\Http\Requests\ShowMenuRequest;
+use App\Http\Requests\StoreMenuRequest;
+use App\Http\Requests\UpdateMenuRequest;
 use App\Models\Menu;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
-use Throwable;
 
 class MenuService
 {
@@ -20,11 +21,15 @@ class MenuService
     }
 
     /**
-     * @param $data
+     * @param StoreMenuRequest $request
      * @return Menu
      */
-    public function create(array $data): Menu
+    public function create(StoreMenuRequest $request): Menu
     {
+        $data = [
+            'category_id' => $request->input('category_id'),
+            'title' => $request->input('title'),
+        ];
         /** @var Menu $menu */
         $menu=Menu::query()->create($data);
 
@@ -32,12 +37,16 @@ class MenuService
     }
 
     /**
-     * @param int $id
-     * @param array $data
+     * @param UpdateMenuRequest $request
      * @return Menu
      */
-    public function update(int $id,array $data): Menu
+    public function update(UpdateMenuRequest $request): Menu
     {
+        $id = $request->route('menu');
+        $data = [
+            'category_id' => $request->input('category_id'),
+            'title' => $request->input('title'),
+        ];
         /** @var Menu $menu */
         $menu=Menu::query()->find($id);
         $menu->update($data);
@@ -46,11 +55,12 @@ class MenuService
     }
 
     /**
-     * @param int $id
+     * @param ShowMenuRequest $request
      * @return Menu
      */
-    public function show(int $id): Menu
+    public function show(ShowMenuRequest $request): Menu
     {
+        $id = $request->route('menu');
         /** @var Menu $menu */
         $menu=Menu::query()->find($id);
 
@@ -58,13 +68,13 @@ class MenuService
     }
 
     /**
-     * @param int $id
+     * @param DestroyMenuRequest $request
      * @return bool
-     * @throws Throwable
      */
-    public function destroy(int $id): bool
+    public function destroy(DestroyMenuRequest $request): bool
     {
+        $id = $request->route('menu');
+
         return Menu::query()->where('id',$id)->delete();
     }
-
 }

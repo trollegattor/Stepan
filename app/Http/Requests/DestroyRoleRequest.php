@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Role;
 use Illuminate\Foundation\Http\FormRequest;
 
 class DestroyRoleRequest extends FormRequest
@@ -11,9 +12,11 @@ class DestroyRoleRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return true;
+        $id = $this->route('role');
+        $role = Role::query()->find($id);
+        return $this->user()->can('delete', $role);
     }
 
     /**

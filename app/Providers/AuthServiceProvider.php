@@ -2,10 +2,9 @@
 
 namespace App\Providers;
 
-use App\Models\Article;
-use App\Models\Category;
-use App\Models\User;
+
 use App\Policies\ArticlePolicy;
+use App\Services\Auth\AuthService;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -16,9 +15,18 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-
-        //'App\Models\Category' => 'App\Policies\CategoryPolicy',
+        //
     ];
+
+    /**
+     * @return void
+     */
+    public function register()
+    {
+        $this->app->bind(AuthService::class, function ($app) {
+            return new AuthService();
+        });
+    }
 
     /**
      * Register any authentication / authorization services.
@@ -28,7 +36,5 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
-
-        //
     }
 }

@@ -12,17 +12,16 @@ class ShowAllRoleRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        print_r([$this->user()->can('viewAny',Role::class)]);
-        return $this->user()->can('viewAny',Role::class);
+        return $this->user()->can('viewAny', Role::class);
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, mixed>
+     * @return array
      */
     public function rules()
     {
-
+        return [
+            //
+        ];
     }
 }

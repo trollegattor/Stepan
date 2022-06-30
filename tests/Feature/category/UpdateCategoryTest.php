@@ -20,14 +20,14 @@ class UpdateCategoryTest extends TestCase
     {
         Category::factory()->count(2)->create(['name' => 'News']);
         $newData = [
-            'type' => Category::CATEGORY_TYPES['MULTI'],
+            'type' => 'multiple',
             'name' => 'Sport',
             'parent_id' => 1,
         ];
         $this->patchJson('/api/category/2', $newData)
             ->assertExactJson(['data' => [
                 'id' => 2,
-                'type' => Category::CATEGORY_TYPES['MULTI'],
+                'type' => 'multiple',
                 'name' => 'Sport',
                 'parent_id' => 1,
             ]]);

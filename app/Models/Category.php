@@ -11,11 +11,6 @@ class Category extends Model
 {
     use HasFactory;
 
-    public const CATEGORY_TYPES = [
-        'SINGLE' => 'single',
-        'MULTI' => 'multiple',
-    ];
-
     /**
      * @var bool
      */

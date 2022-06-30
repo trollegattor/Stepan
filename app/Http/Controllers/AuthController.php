@@ -4,32 +4,32 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\LoginAuthRequest;
 use App\Http\Requests\Auth\RegisterAuthRequest;
-use App\Models\User;
+use App\Services\Auth\AuthService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
-use function bcrypt;
 use function response;
 
 
 class AuthController extends Controller
 {
+    /** @var AuthService $authService */
+    public AuthService $authService;
+
+    /**
+     * @param AuthService $authService
+     */
+    public function __construct(AuthService $authService)
+    {
+        $this->authService = $authService;
+    }
+
     /**
      * @param RegisterAuthRequest $request
      * @return JsonResponse
      */
-    public function register(RegisterAuthRequest $request)
+    public function register(RegisterAuthRequest $request): JsonResponse
     {
-        $protectPassword=bcrypt($request->password);
-        $data=[
-            'login'=>$request->input('login'),
-            'password'=>$protectPassword,
-            'email'=>$request->input('email'),
-            'role_id'=>$request->input('role_id'),
-            'real_name'=>$request->input('real_name'),
-            'surname'=>$request->input('surname')
-        ];
-        $user = User::query()->create($data);
-        $token = $user->createToken($request->login)->plainTextToken;
+        $token = $this->authService->register($request);
+
         return response()->json(['token' => $token], 200);
     }
 
@@ -39,18 +39,8 @@ class AuthController extends Controller
      */
     public function login(LoginAuthRequest $request)
     {
-        $data=[
-            'login'=>$request->input('login'),
-            'password'=>$request->input('password'),
-        ];
+        $token = $this->authService->login($request);
 
-        if (!Auth::attempt($data)) {
-            return response()->json([
-                'message' => 'Invalid login details'
-            ], 401);
-        }
-        $user = User::query()->where('login', $data['login'])->first();
-        $token = $user->createToken($data['login'])->plainTextToken;
         return response()->json([
             'access_token' => $token,
             'token_type' => 'Bearer',

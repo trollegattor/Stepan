@@ -17,22 +17,22 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $newsCategory = Category::query()->create([
-            'type' => Category::CATEGORY_TYPES['MULTI'],
+            'type' => 'multiple',
             'name' => 'News',
             'parent_id' => null,
         ]);
         $firstSubCategory = Category::query()->create([
-            'type' => Category::CATEGORY_TYPES['MULTI'],
+            'type' => 'single',
             'name' => 'About Ukraine',
             'parent_id' => $newsCategory->id,
         ]);
         $aboutUsCategory = Category::query()->create([
-            'type' => Category::CATEGORY_TYPES['SINGLE'],
+            'type' => 'multiple',
             'name' => 'About us',
             'parent_id' => null,
         ]);
         $contactsCategory = Category::query()->create([
-            'type' => Category::CATEGORY_TYPES['SINGLE'],
+            'type' => 'multiple',
             'name' => 'Contacts',
             'parent_id' => null,
         ]);
@@ -199,11 +199,11 @@ class DatabaseSeeder extends Seeder
             'user_index'=>false,
             'user_store'=>false,
             'user_show_all'=>false,
-            'user_show_own'=>false,
+            'user_show_own'=>true,
             'user_update_all'=>false,
-            'user_update_own'=>false,
+            'user_update_own'=>true,
             'user_destroy_all'=>false,
-            'user_destroy_own'=>false,
+            'user_destroy_own'=>true,
 
             'role_index'=>false,
             'role_store'=>false,
@@ -240,11 +240,11 @@ class DatabaseSeeder extends Seeder
             'user_index'=>false,
             'user_store'=>false,
             'user_show_all'=>false,
-            'user_show_own'=>false,
+            'user_show_own'=>true,
             'user_update_all'=>false,
-            'user_update_own'=>false,
+            'user_update_own'=>true,
             'user_destroy_all'=>false,
-            'user_destroy_own'=>false,
+            'user_destroy_own'=>true,
 
             'role_index'=>false,
             'role_store'=>false,
@@ -281,11 +281,11 @@ class DatabaseSeeder extends Seeder
             'user_index'=>false,
             'user_store'=>false,
             'user_show_all'=>false,
-            'user_show_own'=>false,
+            'user_show_own'=>true,
             'user_update_all'=>false,
-            'user_update_own'=>false,
+            'user_update_own'=>true,
             'user_destroy_all'=>false,
-            'user_destroy_own'=>false,
+            'user_destroy_own'=>true,
 
             'role_index'=>false,
             'role_store'=>false,

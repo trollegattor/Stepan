@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\DestroyUserRequest;
+use App\Http\Requests\ShowAllUserRequest;
 use App\Http\Requests\ShowUserRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
@@ -10,9 +11,6 @@ use App\Http\Resources\UserResource;
 use App\Http\Resources\UserResourceCollection;
 use App\Services\UserService\UserService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Throwable;
-use function bcrypt;
 
 class UserController extends Controller
 {
@@ -30,7 +28,7 @@ class UserController extends Controller
     /**
      * @return UserResourceCollection
      */
-    public function index(): UserResourceCollection
+    public function index(ShowAllUserRequest $showAllUserRequest): UserResourceCollection
     {
         $user = $this->userService->getAll();
 
@@ -43,19 +41,9 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request): UserResource
     {
-        $protectPassword = bcrypt($request->input('password'));
-        $data = [
-            'login' => $request->input('login'),
-            'password' => $protectPassword,
-            'email' => $request->input('email'),
-            'role_id' => $request->input('role_id'),
-            'real_name' => $request->input('real_name'),
-            'surname' => $request->input('surname'),
-        ];
-        $newUser = $this->userService->create($data);
+        $newUser = $this->userService->create($request);
 
         return new UserResource($newUser);
-
     }
 
     /**
@@ -64,8 +52,7 @@ class UserController extends Controller
      */
     public function show(ShowUserRequest $request): UserResource
     {
-        $id = $request->route('user');
-        $model = $this->userService->show($id);
+        $model = $this->userService->show($request);
 
         return new UserResource($model);
     }
@@ -76,17 +63,7 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request): UserResource
     {
-        $id = $request->route('user');
-        $protectPassword = bcrypt($request->input('password'));
-        $data = [
-            'login' => $request->input('login'),
-            'password' => $protectPassword,
-            'email' => $request->input('email'),
-            'role_id' => $request->input('role_id'),
-            'real_name' => $request->input('real_name'),
-            'surname' => $request->input('surname'),
-        ];
-        $updateUser = $this->userService->update($id, $data);
+        $updateUser = $this->userService->update($request);
 
         return new UserResource($updateUser);
     }
@@ -94,12 +71,9 @@ class UserController extends Controller
     /**
      * @param DestroyUserRequest $request
      * @return JsonResponse
-     * @throws Throwable
      */
     public function destroy(DestroyUserRequest $request): JsonResponse
     {
-        $id = $request->route('user');
-
-        return new JsonResponse($this->userService->destroy($id));
+        return new JsonResponse($this->userService->destroy($request));
     }
 }

@@ -7,12 +7,14 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class DestroyCategoryRequest extends FormRequest
 {
+
     /**
      * @return bool
      */
     public function authorize(): bool
     {
-        $category = Category::query()->find($this->route('category'));
+        $id = $this->route('category');
+        $category = Category::query()->find($id);
 
         return $this->user()->can('delete', $category);
     }

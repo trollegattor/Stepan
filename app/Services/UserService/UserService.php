@@ -2,9 +2,12 @@
 
 namespace App\Services\UserService;
 
+use App\Http\Requests\DestroyUserRequest;
+use App\Http\Requests\ShowUserRequest;
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
-use Throwable;
 
 class UserService
 {
@@ -18,51 +21,70 @@ class UserService
     }
 
     /**
-     * @param $data
+     * @param StoreUserRequest $request
      * @return User
      */
-    public function create(array $data): User
+    public function create(StoreUserRequest $request): User
     {
+        $protectPassword = bcrypt($request->input('password'));
+        $data = [
+            'login' => $request->input('login'),
+            'password' => $protectPassword,
+            'email' => $request->input('email'),
+            'role_id' => $request->input('role_id'),
+            'real_name' => $request->input('real_name'),
+            'surname' => $request->input('surname'),
+        ];
         /** @var User $user */
-        $user=User::query()->create($data);
+        $user = User::query()->create($data);
 
         return $user;
     }
 
     /**
-     * @param int $id
-     * @param array $data
+     * @param UpdateUserRequest $request
      * @return User
      */
-    public function update(int $id, array $data): User
+    public function update(UpdateUserRequest $request): User
     {
+        $id = $request->route('user');
+        $protectPassword = bcrypt($request->input('password'));
+        $data = [
+            'login' => $request->input('login'),
+            'password' => $protectPassword,
+            'email' => $request->input('email'),
+            'role_id' => $request->input('role_id'),
+            'real_name' => $request->input('real_name'),
+            'surname' => $request->input('surname'),
+        ];
         /** @var User $user */
-        $user=User::query()->find($id);
+        $user = User::query()->find($id);
         $user->update($data);
 
         return $user;
     }
 
     /**
-     * @param int $id
+     * @param ShowUserRequest $request
      * @return User
      */
-    public function show(int $id): User
+    public function show(ShowUserRequest $request): User
     {
+        $id = $request->route('user');
         /** @var User $user */
-        $user=User::query()->find($id);
+        $user = User::query()->find($id);
 
         return $user;
     }
 
     /**
-     * @param int $id
+     * @param DestroyUserRequest $request
      * @return bool
-     * @throws Throwable
      */
-    public function destroy(int $id): bool
+    public function destroy(DestroyUserRequest $request): bool
     {
-        return User::query()->where('id',$id)->delete();
-    }
+        $id = $request->route('user');
 
+        return User::query()->where('id', $id)->delete();
+    }
 }

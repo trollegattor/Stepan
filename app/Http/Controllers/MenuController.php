@@ -10,8 +10,6 @@ use App\Http\Resources\MenuResource;
 use App\Http\Resources\MenuResourceCollection;
 use App\Services\MenuService\MenuService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Throwable;
 
 class MenuController extends Controller
 {
@@ -40,13 +38,9 @@ class MenuController extends Controller
      * @param StoreMenuRequest $request
      * @return MenuResource
      */
-    public function store(StoreMenuRequest $request,): MenuResource
+    public function store(StoreMenuRequest $request): MenuResource
     {
-        $data = [
-            'category_id' => $request->input('category_id'),
-            'title' => $request->input('title'),
-        ];
-        $newMenu = $this->menuService->create($data);
+        $newMenu = $this->menuService->create($request);
 
         return new MenuResource($newMenu);
     }
@@ -57,8 +51,7 @@ class MenuController extends Controller
      */
     public function show(ShowMenuRequest $request): MenuResource
     {
-        $id = $request->route('menu');
-        $model = $this->menuService->show($id);
+        $model = $this->menuService->show($request);
 
         return new MenuResource($model);
     }
@@ -69,12 +62,7 @@ class MenuController extends Controller
      */
     public function update(UpdateMenuRequest $request): MenuResource
     {
-        $id = $request->route('menu');
-        $data = [
-            'category_id' => $request->input('category_id'),
-            'title' => $request->input('title'),
-        ];
-        $updateMenu = $this->menuService->update($id, $data);
+        $updateMenu = $this->menuService->update($request);
 
         return new MenuResource($updateMenu);
     }
@@ -82,12 +70,9 @@ class MenuController extends Controller
     /**
      * @param DestroyMenuRequest $request
      * @return JsonResponse
-     * @throws Throwable
      */
     public function destroy(DestroyMenuRequest $request): JsonResponse
     {
-        $id = $request->route('menu');
-
-        return new JsonResponse($this->menuService->destroy($id));
+        return new JsonResponse($this->menuService->destroy($request));
     }
 }

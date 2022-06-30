@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Role;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateRoleRequest extends FormRequest
@@ -13,7 +14,9 @@ class UpdateRoleRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        $id=$this->route('role');
+        $role=Role::query()->find($id);
+        return $this->user()->can('update',$role);
     }
 
     /**
