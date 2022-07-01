@@ -8,38 +8,25 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-
-/*
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});*/
-//Route::post('/register', [AuthController::class,'register']);
-
-Route::prefix('/sanctum')->group(function() {
-    Route::post('/register', [AuthController::class,'register']);
-    Route::post('/login', [AuthController::class,'login']);
+Route::prefix('/sanctum')->group(function () {
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/login', [AuthController::class, 'login']);
 });
-
-Route::middleware('auth:sanctum')->group(function() {
-    Route::get('user',[UserController::class,'index']);
-
-
-
-    Route::apiResources(['category' => CategoryController::class]);
-    Route::apiResources(['article' => ArticleController::class,]);
-    Route::apiResources(['menu' => MenuController::class,]);
-    //Route::apiResources(['user' => UserController::class,]);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::resource('category', CategoryController::class)
+        ->except(['index', 'show']);
+    Route::resource('article', ArticleController::class)
+        ->except(['index', 'show']);
+    Route::resource('menu', MenuController::class,)
+        ->except(['index', 'show']);
+    Route::apiResources(['user' => UserController::class,]);
     Route::apiResources(['role' => RoleController::class,]);
 });
+Route::resource('category', CategoryController::class)
+    ->only(['index', 'show']);
+Route::resource('article', ArticleController::class)
+    ->only(['index', 'show']);
+Route::resource('menu', MenuController::class,)
+    ->only(['index', 'show']);
 
-
-
-
-
-
-/*
-Route::apiResources(['category' => CategoryController::class]);
-Route::apiResources(['article' => ArticleController::class,]);
-Route::apiResources(['menu' => MenuController::class,]);
-*/
 
